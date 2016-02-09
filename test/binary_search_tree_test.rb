@@ -66,8 +66,16 @@ class BinarySearchTreeTest < Minitest::Test
     assert_equal nil, bst.depth_of(79)
   end
 
-  def test_if_node_keeps_positions_is_less_than_OG_node_move_left
-    skip
+  def test_if_node_exist_in_tree
+
+    bst = BinarySearchTree.new
+    bst.insert(25,"Boss Ni")
+    bst.insert(5,"25th Hour")
+    bst.insert(75,"JACE")
+    bst.insert(80,"Kung Fury")
+
+    assert bst.include?(75)
+    refute bst.include?(60)
   end
 
 #if node_keeps_positions_is_more_than_OG_node_move_right

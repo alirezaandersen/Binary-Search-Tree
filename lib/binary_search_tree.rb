@@ -72,5 +72,9 @@ class BinarySearchTree
     current_node = Node.new(parent: nil, title: movie_title, score: score, depth: depth)
   end
 
+  def include?(score)
+    find_score(score,@root).nil? ? false : true
+  end
+
 
 end
