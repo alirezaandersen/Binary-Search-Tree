@@ -8,7 +8,6 @@ class BinarySearchTree
 
   def initialize
     @root = nil
-    #@match = nil
     @array_of_hashes = []
   end
 
@@ -17,9 +16,7 @@ class BinarySearchTree
     data = CSV.foreach(path) do |row|
       score = row[0].dup.to_i
       title = row[1].dup
-      #binding.pry
       unless include?(score)
-        # binding.pry
         insert(score,title)
         count += 1
       end
@@ -32,7 +29,6 @@ class BinarySearchTree
     return nil unless numeric?(score)
     current_node = @root
     depth = 0
-    # binding.pry
     if @root.nil?
       @root = Node.new(title: movie_title, score: score, depth: depth)
     else
