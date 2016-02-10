@@ -6,6 +6,7 @@ require './lib/binary_search_tree'
 
 class BinarySearchTreeTest < Minitest::Test
 
+
   def test_creates_a_node
     bst = BinarySearchTree.new
     bst.insert(4, "25th Hour")
@@ -15,6 +16,11 @@ class BinarySearchTreeTest < Minitest::Test
   def test_node_is_nil_when_bst_is_created
       bst = BinarySearchTree.new
       assert_equal nil, bst.root
+  end
+
+  def test_node_will_not_insert_invalid_score
+    bst = BinarySearchTree.new
+    assert_equal nil, bst.insert("A","25th Hour")
   end
 
   def test_insert_node_to_tree
@@ -30,6 +36,24 @@ class BinarySearchTreeTest < Minitest::Test
 
     bst.insert(45, "Kung Fury")
     assert_equal 45, bst.root.left_node.right_node.score
+
+    bst.insert(90, "JACE")
+    assert_equal 90, bst.root.right_node.right_node.score
+  end
+
+  def test_node_commits_to_specific_branch
+    bst = BinarySearchTree.new
+    bst.insert(40, "25th Hour")
+    assert_equal 40, bst.root.score
+
+    bst.insert(30, "I love phlipp Morris")
+    assert_equal 30, bst.root.left_node.score
+
+    bst.insert(50, "Goonies")
+    assert_equal 50, bst.root.right_node.score
+
+    bst.insert(45, "Kung Fury")
+    assert_equal 45, bst.root.right_node.left_node.score
 
     bst.insert(90, "JACE")
     assert_equal 90, bst.root.right_node.right_node.score
@@ -54,9 +78,11 @@ class BinarySearchTreeTest < Minitest::Test
     bst.insert(80,"Kung Fury")
 
     assert_equal 2, bst.depth_of(80)
+    assert_equal 1, bst.depth_of(75)
   end
 
   def test_returns_depth_of_valid_score_only
+
     bst = BinarySearchTree.new
     bst.insert(25,"Boss Ni")
     bst.insert(5,"25th Hour")
@@ -78,8 +104,85 @@ class BinarySearchTreeTest < Minitest::Test
     refute bst.include?(60)
   end
 
-#if node_keeps_positions_is_more_than_OG_node_move_right
+  def test_if_invalid_node_exist_in_tree
 
-#
+    bst = BinarySearchTree.new
+    bst.insert(25,"Boss Ni")
+    bst.insert(5,"25th Hour")
+    bst.insert(75,"Mission Impossible")
+    bst.insert(80,"Kung Fury")
+
+    refute bst.include?(100)
+    assert bst.include?(75)
+  end
+
+  def test_maximum_scoring_node_returned
+
+    bst = BinarySearchTree.new
+    bst.insert(30,"Boss Ni")
+    bst.insert(25,"25th Hour")
+    bst.insert(65,"Mission Impossible")
+    bst.insert(67,"Kung Fury")
+
+    assert "Kung Fury => 67", bst.max
+  end
+
+  def test_minimum_scoring_node_returned
+
+    bst = BinarySearchTree.new
+    bst.insert(50,"Boss Ni")
+    bst.insert(25,"25th Hour")
+    bst.insert(15,"Mission Impossible")
+    bst.insert(30,"Kung Fury")
+    bst.insert(67,"King Kong")
+
+    assert "Mission Impossible => 67", bst.min
+  end
+
+def test_bst_will_sort_in_numeric_order_by_score
+  bst = BinarySearchTree.new
+  bst.insert(90,"Boss Ni")
+  bst.insert(25,"25th Hour")
+  bst.insert(37,"Mission Impossible")
+  bst.insert(65,"Kung Fury")
+  bst.insert(20,"Boss Ni")
+  bst.insert(85,"25th Hour")
+  bst.insert(97,"Mission Impossible")
+  bst.insert(1,"Kung Fury")
+
+  assert_equal [{"Kung Fury"=>1}, {"Boss Ni"=>20}, {"25th Hour"=>25}, {"Mission Impossible"=>37}, {"Kung Fury"=>65}, {"25th Hour"=>85}, {"Boss Ni"=>90}, {"Mission Impossible"=>97}], bst.sort
+end
+
+  def test_bst_will_load_file_and_skip_existing_entries
+
+    bst = BinarySearchTree.new
+    bst.insert(91,"Boss Ni")
+    bst.insert(41,"25th Hour")
+    assert_equal 10, bst.load('./lib/movie.txt')
+  end
+
+  def test_bst_will_sort_loaded_file
+
+    bst = BinarySearchTree.new
+    bst.load('./lib/movie.txt')
+    assert_equal [{" I Love You Phillip Morris"=>10}, {" Hannibal Buress: Comedy Camisado part 2"=>14}, {" Experimenter"=>22}, {" Meet My Valentine Is Killing Me"=>23}, {" Trolls Part 2: The return of module 1"=>30}, {" Hannibal Buress: Comedy Camisado"=>34}, {" Love"=>41}, {" Experimenter With My Emotions"=>42}, {" French Dirty Dancing"=>54}, {" Meet My Valentine"=>63}, {" French Dirty"=>84}, {" Love For Code: Led to the end of my relationship"=>91}], bst.sort
+  end
+
+  def test_bst_can_find_depth_by_score
+    bst = BinarySearchTree.new
+    bst.insert(25,"Boss Ni")
+    bst.insert(5,"25th Hour")
+    bst.insert(75,"JACE")
+    bst.insert(80,"Kung Fury")
+
+    assert_equal 2, bst.depth_of(80)
+    assert_equal 1, bst.depth_of(75)
+  end
+
+  def test_bst_can_find_depth_of_loaded_file
+    bst = BinarySearchTree.new
+    bst.load('./lib/movie.txt')
+    assert_equal 2, bst.depth_of(22)
+  end
 
 end

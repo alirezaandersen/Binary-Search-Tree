@@ -1,4 +1,5 @@
 require 'pry'
+require 'csv'
 require_relative 'node'
 
 class BinarySearchTree
@@ -7,9 +8,28 @@ class BinarySearchTree
 
   def initialize
     @root = nil
+    #@match = nil
+    @array_of_hashes = []
   end
 
+  def load(path)
+    count = 0
+    data = CSV.foreach(path) do |row|
+      score = row[0].dup.to_i
+      title = row[1].dup
+      #binding.pry
+      unless include?(score)
+        # binding.pry
+        insert(score,title)
+        count += 1
+      end
+    end
+    count
+  end
+
+
   def insert(score,movie_title)
+    return nil unless numeric?(score)
     current_node = @root
     depth = 0
     # binding.pry
@@ -19,62 +39,106 @@ class BinarySearchTree
       while nil != current_node
         depth += 1
         if #left_child_node(score, movie_title)
-           (score < current_node.score) && (current_node.left_node == nil)
+          (score < current_node.score) && (current_node.left_node == nil)
           current_node.left_node =
           Node.new(title: movie_title, score: score, depth: depth)
-      elsif #right_child_node(score, movie_title)
+        elsif #right_child_node(score, movie_title)
           (score > current_node.score) && (current_node.right_node == nil)
           current_node.right_node = Node.new(title: movie_title, score: score, depth: depth)
-        elsif (score < current_node.score)
-          current_node = current_node.left_node
-        elsif (score > current_node.score)
-          current_node = current_node.right_node
         else
-          return current_node.depth
+          return current_node.depth if score == current_node.score
+          current_node = (score < current_node.score) ? current_node.left_node : current_node.right_node
         end
       end
     end
     depth
   end
 
-  # def left_child_node(score, movie_title, depth = nil)
-  #   # current_node = @root
-  #   # (score < current_node.score) && (current_node.left_node == nil)
-  #   # current_node.left_node =
-  #   # Node.new(title: movie_title, score: score, depth: depth)
-  #   # #  left_node < parent_node
-  #   # #  place left_node under parent to the left
-  # end
+  def find_score(score,current_node=@root)
+    return if current_node.nil?
+    return (current_node.score == score) ? current_node : find_score(score,current_node.left_node) || find_score(score,current_node.right_node)
+  end
 
-  # def right_child_node(score, movie_title, depth = nil)
-  #   # current_node = @root
-  #   # (score > current_node.score) && (current_node.right_node == nil)
-  #   # current_node.right_node = Node.new(title: movie_title, score: score, depth: depth)
-  #   # # right_node > parent_node
-  #   # # place right_node under parent to the right
-  #   # # p @root
-  # end
 
-  def find_score(score,current_node= @root)
-    return current_node if current_node && current_node.score == score
-    return if (current_node == nil)
+  def health(depth)
+
+  end
+=begin
+  def find_score2(score,current_node= @root)
+    @match = nil if current_node == @root
+    # binding.pry
+    return if current_node.nil?
+    if current_node.score == score
+      @match = current_node
+      return @match
+    end
     find_score(score,current_node.left_node)
     find_score(score,current_node.right_node)
+    @match
+  end
+=end
+
+
+  def sort(current_node = @root)
+    @array_of_hashes.clear if current_node == @root
+
+    return if current_node.nil?
+    sort(current_node.left_node)
+    @array_of_hashes << current_node.get_value
+    sort(current_node.right_node)
+    @array_of_hashes
+  end
+
+  def max
+    current_node = @root
+    return nil if current_node.nil?
+    while current_node.right_node != nil
+      current_node = current_node.right_node
+    end
+    current_node.get_value
+  end
+
+  def min
+    current_node = @root
+    return nil if current_node.nil?
+    while current_node.left_node != nil
+      current_node = current_node.left_node
+    end
+    current_node.get_value
   end
 
   def depth_of(score = nil)
     node = find_score(score,@root)
     p node.depth unless node.nil?
-    score = node.depth unless node.nil?
-  end
-
-  def create_node_from_movie_title_score(score, movie_title)
-    current_node = Node.new(parent: nil, title: movie_title, score: score, depth: depth)
+    node.depth unless node.nil?
   end
 
   def include?(score)
     find_score(score,@root).nil? ? false : true
+    # binding.pry
+  end
+
+  def numeric?(score)
+    return true if score =~ /\A\d+\Z/
+    true if Float(score) rescue false
   end
 
 
 end
+
+bst = BinarySearchTree.new
+bst.insert(50,"Boss Ni")
+bst.insert(41,"25th Hour")
+bst.insert(90,"Boss Ni")
+bst.insert(25,"25th Hour")
+bst.insert(37,"Mission Impossible")
+bst.insert(65,"Kung Fury")
+bst.insert(20,"Boss Ni")
+bst.insert(85,"25th Hour")
+bst.insert(97,"Mission Impossible")
+bst.insert(1,"Kung Fury")
+
+bst.health(2)
+
+bst.load('./lib/movie.txt')
+bst.sort
