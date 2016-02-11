@@ -55,6 +55,7 @@ class BinarySearchTree
   end
 
   def find_score(score,current_node=@root)
+    return nil unless numeric?(score)
     return if current_node.nil?
     return (current_node.score == score) ? current_node : find_score(score,current_node.left_node) || find_score(score,current_node.right_node)
   end
@@ -131,14 +132,15 @@ class BinarySearchTree
   end
 
   def depth_of(score = nil)
+    return nil unless numeric?(score)
     node = find_score(score,@root)
     # p node.depth unless node.nil?
     node.depth unless node.nil?
   end
 
   def include?(score)
+    return nil unless numeric?(score)
     find_score(score,@root).nil? ? false : true
-    # binding.pry
   end
 
   def numeric?(score)

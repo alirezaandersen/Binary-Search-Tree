@@ -412,5 +412,70 @@ end
       assert_equal 50, bst.root.score
   end
 
+  def test_it_inserts_first_node_as_root_and_returns_depth
+    bst = BinarySearchTree.new
+    bst.insert(50,"Boss Ni")
+    bst.insert(41,"25th Hour")
+    bst.insert(90,"Boss Nice")
+
+    assert_equal 50, bst.root.score
+    assert_equal 0, bst.depth_of(bst.root.score)
+  end
+
+  def  test_second_inserted_node_begins_tree_and_returns_depth
+    bst = BinarySearchTree.new
+    bst.insert(50,"Boss Ni")
+    bst.insert(41,"25th Hour")
+
+    assert bst.include?(41)
+    assert_equal 1, bst.depth_of(41)
+
+    assert bst.insert(90,"Boss Nice")
+
+    assert bst.include?(90)
+    assert_equal 1, bst.depth_of(41)
+  end
+
+  def test_will_return_nil_for_invalid_max
+    bst = BinarySearchTree.new
+    bst.insert(50,"Boss Ni")
+    bst.insert(41,"25th Hour")
+    bst.insert(60,"Boss Nice")
+    bst.insert(90,"Trolling Part 2")
+
+    assert "Trolling Part 2 => 90", bst.max
+    assert_equal 2, bst.depth_of(90)
+  end
+
+  def test_sort_returns_array_of_movie_hashes
+    bst = BinarySearchTree.new
+    bst.insert(90,"Boss Ni")
+    bst.insert(25,"25th Hour")
+    bst.insert(37,"Mission Impossible")
+    bst.insert(65,"Kung Fury")
+    bst.insert(20,"Boss Ni")
+    bst.insert(85,"25th Hour")
+    bst.insert(97,"Mission Impossible")
+    bst.insert(12,"Trolling Part 2")
+
+    assert_equal [{"Trolling Part 2"=>12}, {"Boss Ni"=>20}, {"25th Hour"=>25}, {"Mission Impossible"=>37}, {"Kung Fury"=>65}, {"25th Hour"=>85}, {"Boss Ni"=>90}, {"Mission Impossible"=>97}], bst.sort
+  end
+
+  def test_health_returns_array_of_values
+    bst = BinarySearchTree.new
+    bst.insert(1,"Boss Ni")
+    bst.insert(100,"25th Hour")
+    bst.insert(10,"Mission Impossible")
+    bst.insert(90,"Kung Fury")
+    bst.insert(20,"Boss Ni")
+    bst.insert(80,"25th Hour")
+    bst.insert(30,"Mission Impossible")
+    bst.insert(40,"Trolling Part 2")
+
+    assert_equal [[1, 8, 100.0]], bst.health(0)
+
+    assert_equal [[90, 5, 62.5]], bst.health(3)
+  end
+
 
 end
