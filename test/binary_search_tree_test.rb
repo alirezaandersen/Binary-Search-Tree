@@ -185,4 +185,232 @@ end
     assert_equal 2, bst.depth_of(22)
   end
 
+  def test_bst_will_return_nil_for_invalid_health
+    bst = BinarySearchTree.new
+    bst.insert(90,"Boss Ni")
+    bst.insert(25,"25th Hour")
+    bst.insert(37,"Mission Impossible")
+    bst.insert(65,"Kung Fury")
+    bst.insert(20,"Boss Ni")
+    bst.insert(85,"25th Hour")
+    bst.insert(97,"Mission Impossible")
+    bst.insert(1,"Kung Fury")
+
+    assert_equal nil, bst.health(7)
+  end
+
+  def test_bst_counts_number_of_depths
+    bst = BinarySearchTree.new
+    bst.insert(90,"Boss Ni")
+    bst.insert(25,"25th Hour")
+    bst.insert(37,"Mission Impossible")
+    bst.insert(65,"Kung Fury")
+    bst.insert(20,"Boss Ni")
+    bst.insert(85,"25th Hour")
+    bst.insert(97,"Mission Impossible")
+    bst.insert(1,"Kung Fury")
+
+    assert_equal 2, bst.get_nodes_at_depth(2)
+    assert_equal 2, bst.get_nodes_at_depth(3)
+    assert_equal 2, bst.get_nodes_at_depth(1)
+  end
+
+  def test_bst_returns_number_of_children_for_right_node
+    bst = BinarySearchTree.new
+    bst.insert(50,"Boss Ni")
+    bst.insert(41,"25th Hour")
+    bst.insert(90,"Boss Nice")
+    bst.insert(25,"101th Hour")
+    bst.insert(37,"Mission Impossible")
+    bst.insert(65,"Kung Fury")
+    bst.insert(20,"Boss Night_time")
+    bst.insert(85,"30th Hour")
+    bst.insert(97,"Mission Impossible")
+    bst.insert(1,"Kung Funky")
+
+    assert_equal 4, bst.count_children(bst.root.right_node)
+  end
+
+  def test_bst_returns_number_of_children_for_left_node
+    bst = BinarySearchTree.new
+    bst.insert(50,"Boss Ni")
+    bst.insert(41,"25th Hour")
+    bst.insert(90,"Boss Nice")
+    bst.insert(25,"101th Hour")
+    bst.insert(37,"Mission Impossible")
+    bst.insert(65,"Kung Fury")
+    bst.insert(20,"Boss Night_time")
+    bst.insert(85,"30th Hour")
+    bst.insert(97,"Mission Impossible")
+    bst.insert(1,"Kung Funky")
+
+    assert_equal 5, bst.count_children(bst.root.left_node)
+  end
+
+  def test_bst_returns_number_of_children_for_left_node
+    bst = BinarySearchTree.new
+    bst.insert(50,"Boss Ni")
+    bst.insert(41,"25th Hour")
+    bst.insert(90,"Boss Nice")
+    bst.insert(25,"101th Hour")
+    bst.insert(37,"Mission Impossible")
+    bst.insert(65,"Kung Fury")
+    bst.insert(20,"Boss Night_time")
+    bst.insert(85,"30th Hour")
+    bst.insert(97,"Mission Impossible")
+    bst.insert(1,"Kung Funky")
+
+    assert_equal 5, bst.count_children(bst.root.left_node)
+  end
+
+  def test_return_number_of_childern_for_specific_node
+    bst = BinarySearchTree.new
+    bst.insert(50,"Boss Ni")
+    bst.insert(41,"25th Hour")
+    bst.insert(90,"Boss Nice")
+    bst.insert(25,"101th Hour")
+    bst.insert(37,"Mission Impossible")
+    bst.insert(65,"Kung Fury")
+    bst.insert(20,"Boss Night_time")
+    bst.insert(85,"30th Hour")
+    bst.insert(97,"Mission Impossible")
+    bst.insert(1,"Kung Funky")
+
+    assert_equal 4, bst.count_children(bst.find_score(90))
+  end
+
+  def test_health_of_nodes
+    bst = BinarySearchTree.new
+    bst.insert(50,"Boss Ni")
+    bst.insert(41,"25th Hour")
+    bst.insert(90,"Boss Nice")
+    bst.insert(25,"101th Hour")
+    bst.insert(37,"Mission Impossible")
+    bst.insert(65,"Kung Fury")
+    bst.insert(20,"Boss Night_time")
+    bst.insert(85,"30th Hour")
+    bst.insert(97,"Mission Impossible")
+    bst.insert(1,"Kung Funky")
+
+    assert_equal [[25, 4, 40.0], [65, 2, 20.0], [97, 1, 10.0]], bst.health(2)
+  end
+
+  def test_invalid_health_levels
+      bst = BinarySearchTree.new
+      bst.insert(90,"Boss Ni")
+      bst.insert(25,"25th Hour")
+      bst.insert(37,"Mission Impossible")
+      bst.insert(65,"Kung Fury")
+      bst.insert(20,"Boss Ni")
+      bst.insert(85,"25th Hour")
+      bst.insert(97,"Mission Impossible")
+      bst.insert(1,"Kung Fury")
+
+      assert_equal nil, bst.health(1000)
+  end
+
+  def test_number_depth_at_particular_depth
+    bst = BinarySearchTree.new
+    bst.insert(90,"Boss Ni")
+    bst.insert(25,"25th Hour")
+    bst.insert(37,"Mission Impossible")
+    bst.insert(65,"Kung Fury")
+    bst.insert(20,"Boss Ni")
+    bst.insert(85,"25th Hour")
+    bst.insert(97,"Mission Impossible")
+    bst.insert(1,"Kung Fury")
+
+    assert_equal 2, bst.get_nodes_at_depth(2)
+  end
+
+  def test_total_number_of_nodes_in_tree
+    bst = BinarySearchTree.new
+    bst.insert(90,"Boss Ni")
+    bst.insert(25,"25th Hour")
+    bst.insert(37,"Mission Impossible")
+    bst.insert(65,"Kung Fury")
+    bst.insert(20,"Boss Ni")
+    bst.insert(85,"25th Hour")
+    bst.insert(97,"Mission Impossible")
+    bst.insert(1,"Kung Fury")
+
+    assert_equal 8, bst.count_children(bst.root)
+  end
+
+  def test_tree_has_leaves
+    bst = BinarySearchTree.new
+    bst.insert(50,"Boss Ni")
+    bst.insert(41,"25th Hour")
+    bst.insert(90,"Boss Nice")
+    bst.insert(25,"101th Hour")
+    bst.insert(37,"Mission Impossible")
+    bst.insert(65,"Kung Fury")
+    bst.insert(20,"Boss Night_time")
+    bst.insert(85,"30th Hour")
+    bst.insert(97,"Mission Impossible")
+    bst.insert(1,"Kung Funky")
+
+    assert_equal 4, bst.leaves
+  end
+
+  def test_particular_node_has_leaves
+    bst = BinarySearchTree.new
+    bst.insert(50,"Boss Ni")
+    bst.insert(41,"25th Hour")
+    bst.insert(90,"Boss Nice")
+    bst.insert(25,"101th Hour")
+    bst.insert(37,"Mission Impossible")
+    bst.insert(65,"Kung Fury")
+    bst.insert(20,"Boss Night_time")
+    bst.insert(85,"30th Hour")
+    bst.insert(97,"Mission Impossible")
+    bst.insert(1,"Kung Funky")
+
+    assert_equal 2, bst.leaves(bst.find_score(25))
+  end
+
+  def test_tree_has_hight
+    bst = BinarySearchTree.new
+    bst.insert(50,"Boss Ni")
+    bst.insert(41,"25th Hour")
+    bst.insert(90,"Boss Nice")
+    bst.insert(25,"101th Hour")
+    bst.insert(37,"Mission Impossible")
+    bst.insert(65,"Kung Fury")
+    bst.insert(20,"Boss Night_time")
+    bst.insert(85,"30th Hour")
+    bst.insert(97,"Mission Impossible")
+    bst.insert(1,"Kung Funky")
+
+    assert_equal 4, bst.height
+  end
+
+  def test_tree_has_right_node
+    bst = BinarySearchTree.new
+    bst.insert(50,"Boss Ni")
+    bst.insert(41,"25th Hour")
+    bst.insert(90,"Boss Nice")
+
+    assert_equal 90, bst.root.right_node.score
+  end
+
+  def test_tree_has_left_node
+    bst = BinarySearchTree.new
+    bst.insert(50,"Boss Ni")
+    bst.insert(41,"25th Hour")
+    bst.insert(90,"Boss Nice")
+
+    assert_equal 41, bst.root.left_node.score
+  end
+
+  def test_tree_has_been_created
+      bst = BinarySearchTree.new
+      bst.insert(50,"Boss Ni")
+      bst.insert(41,"25th Hour")
+      bst.insert(90,"Boss Nice")
+
+      assert_equal 50, bst.root.score
+  end
+
+
 end

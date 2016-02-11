@@ -4,11 +4,15 @@ require_relative 'node'
 
 class BinarySearchTree
 
-  attr_reader :root
+  attr_reader :root, :depth_hash
+  attr_accessor :count, :leaf_count
 
   def initialize
     @root = nil
     @array_of_hashes = []
+    @count = 0
+    @depth_hash = Hash.new { |h,k| h[k] = [] }
+    @leaf_count = 0
   end
 
   def load(path)
@@ -57,27 +61,50 @@ class BinarySearchTree
 
 
   def health(depth)
+    result = []
+    @count = 0
 
+    @depth_hash = hash_of_depths
+    nodes = @depth_hash.fetch(depth,nil)
+    return nil if nodes.nil?
+
+    total_nodes = count_children(@root).to_f
+    nodes.each{|node|
+      @count = 0
+      child_count = count_children(node)
+      result << [node.score, child_count, child_count/total_nodes*100]
+    }
+    result
   end
-=begin
-  def find_score2(score,current_node= @root)
-    @match = nil if current_node == @root
-    # binding.pry
+
+  def get_nodes_at_depth(depth)
+    @depth_hash = hash_of_depths
+    get_depth =  @depth_hash.fetch(depth,nil?)
+    get_depth.count
+  end
+
+  def hash_of_depths(current_node = @root)
+    @depth_hash.clear if current_node == @root
     return if current_node.nil?
-    if current_node.score == score
-      @match = current_node
-      return @match
-    end
-    find_score(score,current_node.left_node)
-    find_score(score,current_node.right_node)
-    @match
+    hash_of_depths(current_node.left_node)
+    @depth_hash[current_node.depth] << current_node
+    hash_of_depths(current_node.right_node)
+    @depth_hash
   end
-=end
 
+  def height
+    hash_of_depths.keys.max
+  end
+
+  def count_children(current_node = @root)
+    return if current_node.nil?
+    count_children(current_node.left_node)
+    count_children(current_node.right_node)
+    @count +=1
+  end
 
   def sort(current_node = @root)
     @array_of_hashes.clear if current_node == @root
-
     return if current_node.nil?
     sort(current_node.left_node)
     @array_of_hashes << current_node.get_value
@@ -105,7 +132,7 @@ class BinarySearchTree
 
   def depth_of(score = nil)
     node = find_score(score,@root)
-    p node.depth unless node.nil?
+    # p node.depth unless node.nil?
     node.depth unless node.nil?
   end
 
@@ -119,22 +146,27 @@ class BinarySearchTree
     true if Float(score) rescue false
   end
 
+  def leaves(current_node = @root)
+    return if current_node.nil?
+
+    leaves(current_node.left_node)
+    leaves(current_node.right_node)
+    if current_node.left_node.nil? && current_node.right_node.nil?
+      @leaf_count += 1
+    end
+    @leaf_count
+  end
 
 end
 
 bst = BinarySearchTree.new
 bst.insert(50,"Boss Ni")
 bst.insert(41,"25th Hour")
-bst.insert(90,"Boss Ni")
-bst.insert(25,"25th Hour")
+bst.insert(90,"Boss Nice")
+bst.insert(25,"101th Hour")
 bst.insert(37,"Mission Impossible")
 bst.insert(65,"Kung Fury")
-bst.insert(20,"Boss Ni")
-bst.insert(85,"25th Hour")
+bst.insert(20,"Boss Night_time")
+bst.insert(85,"30th Hour")
 bst.insert(97,"Mission Impossible")
-bst.insert(1,"Kung Fury")
-
-bst.health(2)
-
-bst.load('./lib/movie.txt')
-bst.sort
+bst.insert(1,"Kung Funky")
